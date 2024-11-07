@@ -1,3 +1,18 @@
+function mostrarResultado(personagem) {
+    const mensagemDiv = document.getElementById("mensagem");
+    mensagemDiv.innerHTML = `
+    <div class="alert alert-success" role="alert">
+    <strong>Nome:</strong> ${personagem.name || 'Não disponível'}<br>
+    <strong>Altura:</strong> ${personagem.height || 'Não disponível'} cm<br>
+    <strong>Peso:</strong> ${personagem.mass || 'Não disponível'} kg
+    </div>`;
+}
+
+function mostrarErro(mensagem, tipo) {
+    const mensagemDiv = document.getElementById("mensagem");
+    mensagemDiv.innerHTML = `<div class="alert alert-${tipo}" role="alert">${mensagem}</div>`;
+}
+
 async function buscarPersonagem() {
     const mensagemDiv = document.getElementById("mensagem");
     mensagemDiv.innerHTML = "";
@@ -24,17 +39,4 @@ async function buscarPersonagem() {
     }
 }
 
-function mostrarErro(mensagem, tipo) {
-    const mensagemDiv = document.getElementById("mensagem");
-    mensagemDiv.innerHTML = `<div class="alert alert-${tipo}" role="alert">${mensagem}</div>`;
-}
 
-function mostrarResultado(personagem) {
-    const mensagemDiv = document.getElementById("mensagem");
-    mensagemDiv.innerHTML = `
-      <div class="alert alert-success" role="alert">
-        <strong>Nome:</strong> ${personagem.name}<br>
-        <strong>Altura:</strong> ${personagem.height} cm<br>
-        <strong>Peso:</strong> ${personagem.mass} kg
-      </div>`;
-}

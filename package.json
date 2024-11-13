@@ -1,0 +1,19 @@
+{
+  "name": "trab_aval_cc_unifor_2024.2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint 0*/* --fix "
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "João Pedro lopes - 2426048, Vinicius Arrais Moraes Lima - 2412843, Christian",
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "eslint": "^9.14.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.12.0"
+  }
+}

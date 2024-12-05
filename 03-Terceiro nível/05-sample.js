@@ -1,23 +1,24 @@
+const lmtCustoCred = 10000;
+
 async function buscarVeiculosECalcularCusto() {
     try {
-        const resposta = await fetch('https://swapi.dev/api/vehicles/');
+        const resposta = await fetch("https://swapi.dev/api/vehicles/");
         const dados = await resposta.json();
 
-        const veiculosCaros = dados.results.filter(veiculo => parseInt(veiculo.cost_in_credits) > 10000);
+        const veiculosCaros = dados.results.filter((veiculo) => parseInt(veiculo.cost_in_credits, 10) > lmtCustoCred);
 
         console.log("Veículos caros (mais de 10.000 créditos):");
-        veiculosCaros.forEach(veiculo => {
+        veiculosCaros.forEach((veiculo) => {
             console.log(`- ${veiculo.name}: ${veiculo.cost_in_credits} créditos`);
         });
 
         const custoTotal = veiculosCaros.reduce((total, veiculo) => {
-            return total + parseInt(veiculo.cost_in_credits);
+            return total + parseInt(veiculo.cost_in_credits, 10);
         }, 0);
 
         console.log(`Custo total dos veículos caros: ${custoTotal} créditos`);
-
     } catch (erro) {
-        console.error('Erro ao buscar veículos:', erro);
+        console.error("Erro ao buscar veículos:", erro);
     }
 }
 

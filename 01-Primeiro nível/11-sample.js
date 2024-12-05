@@ -1,85 +1,151 @@
-class z {
-    constructor(a, b, c, d, e, f, g, h) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-        this.e = e;
-        this.f = f;
-        this.g = g;
-        this.h = h;
+const MILISSEGUNDOS_POR_ANO = 31536000000;
+const LIMITE_TENTATIVAS_LOGIN = 4;
+const INDICE_CARLOS = 0;
+const INDICE_JOSE = 2;
+const INDICE_MARIA = 3;
+
+const DADOS_CRIACAO_LOGIN_USUARIOS = {
+    carlos: { anoCriacao: 2023, mesCriacao: 1, diaCriacao: 15, anoLogin: 2024, mesLogin: 8, diaLogin: 1 },
+    ana: { anoCriacao: 2020, mesCriacao: 4, diaCriacao: 22, anoLogin: 2024, mesLogin: 7, diaLogin: 31 },
+    jose: { anoCriacao: 2022, mesCriacao: 10, diaCriacao: 5, anoLogin: 2024, mesLogin: 6, diaLogin: 10 },
+    maria: { anoCriacao: 2021, mesCriacao: 2, diaCriacao: 10, anoLogin: 2023, mesLogin: 12, diaLogin: 25 }
+};
+
+class Usuario {
+    constructor({ nome, idade, funcao, dataCriacao, dataUltimoLogin, ativo, tentativasLogin }) {
+        try {
+            this.nome = nome;
+            this.idade = idade;
+            this.funcao = funcao;
+            this.dataCriacao = dataCriacao;
+            this.dataUltimoLogin = dataUltimoLogin;
+            this.ativo = ativo;
+            this.tentativasLogin = tentativasLogin;
+        } catch (error) {
+            console.error(`Erro ao inicializar o usuário ${nome}: ${error.message}`);
+        }
     }
 
-    x() {
-        if (this.f) {
-            console.log("Ativo");
+    verificarStatus() {
+        try {
+            console.log(this.ativo ? "Ativo." : "Inativo");
+        } catch (error) {
+            console.error(`Erro ao verificar status do usuário ${this.nome}: ${error.message}`);
+        }
+    }
+
+    verificarAcesso() {
+        try {
+            console.log(this.funcao === "admin" ? "Admin pode acessar." : "Convidado tem acesso limitado.");
+        } catch (error) {
+            console.error(`Erro ao verificar acesso do usuário ${this.nome}: ${error.message}`);
+        }
+    }
+}
+
+function tentativasExcessivas(usuario, limite = LIMITE_TENTATIVAS_LOGIN) {
+    try {
+        return usuario.tentativasLogin > limite;
+    } catch (error) {
+        console.error(`Erro ao verificar tentativas de login para o usuário ${usuario.nome}: ${error.message}`);
+        return false;
+    }
+}
+
+function exibirMensagemTentativas(usuario, limite) {
+    try {
+        const mensagem = tentativasExcessivas(usuario, limite)
+            ? "Tentativas de login excessivas."
+            : "Tentativas de login sob controle.";
+        console.log(mensagem);
+    } catch (error) {
+        console.error(`Erro ao exibir mensagem de tentativas de login ${usuario.nome}: ${error.message}`);
+    }
+}
+
+function ultimoLoginMaisRecente(usuario1, usuario2) {
+    try {
+        return usuario1.dataUltimoLogin > usuario2.dataUltimoLogin ? usuario1 : usuario2;
+    } catch (error) {
+        console.error("Erro ao comparar datas de último login:", error.message);
+        return null;
+    }
+}
+
+function exibirMensagemUltimoLogin(usuario1, usuario2) {
+    try {
+        const usuarioMaisRecente = ultimoLoginMaisRecente(usuario1, usuario2);
+        if (usuarioMaisRecente) {
+            console.log(`${usuarioMaisRecente.nome} logou mais recentemente.`);
         } else {
-            console.log("Inativo");
+            console.log("Erro ao determinar o último login.");
         }
-    }
-
-    y() {
-        if (this.c === 'admin') {
-            console.log("Admin pode acessar todas as áreas.");
-        } else {
-            console.log("Convidado tem acesso limitado.");
-        }
+    } catch (error) {
+        console.error(`Erro ao exibir mensagem de último login: ${error.message}`);
     }
 }
 
-// Deixe a função clara para que seja possível de compreender que ela verifica o número de usuários com a role de admin
-function t(users) {
-    let c = 0;
-    for (let i = 0; i < users.length; i++) {
-        if (users[i].c === 'admin') {
-            c++;
-        }
-    }
-    return c;
-}
-
-// Deixe a função clara para que seja possível de compreender que ela verifica se o número de tentativas de login é excessivo
-function l(a, b) {
-    if (a.h > b) {
-        console.log("Tentativas de login excessivas.");
-    } else {
-        console.log("Tentativas de login sob controle.");
+function usuarioCriadoRecentemente(usuario) {
+    try {
+        const agora = new Date();
+        return agora - usuario.dataCriacao < MILISSEGUNDOS_POR_ANO;
+    } catch (error) {
+        console.error(`Erro ao verificar se o usuário ${usuario.nome} foi criado recentemente: ${error.message}`);
+        return false;
     }
 }
 
-// Deixe a função clara para que seja possível de compreender que ela verifica qual usuário logou mais recentemente
-function c(u1, u2) {
-    if (u1.e > u2.e) {
-        return u1.a + " logou mais recentemente.";
-    } else {
-        return u2.a + " logou mais recentemente.";
+function exibirMensagemUsuarioRecente(usuario) {
+    try {
+        const mensagem = usuarioCriadoRecentemente(usuario)
+            ? "Usuário criado recentemente."
+            : "Usuário antigo.";
+        console.log(mensagem);
+    } catch (error) {
+        console.error(`Erro ao exibir mensagem de criação recente para o usuário ${usuario.nome}: ${error.message}`);
     }
 }
 
-// Deixe a função clara para que seja possível de compreender que ela verifica se o usuário foi criado recentemente
-function r(user) {
-    let now = new Date();
-    if (now - user.d < 31536000000) {
-        console.log("Usuário criado recentemente.");
-    } else {
-        console.log("Usuário antigo.");
-    }
-}
-
-let usrs = [
-    new z("Carlos", 25, 'admin', new Date(2023, 1, 15), new Date(2024, 8, 1), true, 100, 2),
-    new z("Ana", 30, 'guest', new Date(2020, 4, 22), new Date(2024, 7, 31), true, 50, 3),
-    new z("José", 29, 'admin', new Date(2022, 10, 5), new Date(2024, 6, 10), false, 200, 5),
-    new z("Maria", 35, 'guest', new Date(2021, 2, 10), new Date(2023, 12, 25), false, 80, 7)
+const usuarios = [
+    new Usuario({
+        nome: "Carlos",
+        idade: 25,
+        funcao: "admin",
+        dataCriacao: new Date(
+            DADOS_CRIACAO_LOGIN_USUARIOS.carlos.anoCriacao, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.carlos.mesCriacao, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.carlos.diaCriacao
+        ),
+        dataUltimoLogin: new Date(
+            DADOS_CRIACAO_LOGIN_USUARIOS.carlos.anoLogin, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.carlos.mesLogin, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.carlos.diaLogin
+        ),
+        ativo: true,
+        tentativasLogin: 100
+    }),
+    new Usuario({
+        nome: "Ana",
+        idade: 30,
+        funcao: "guest",
+        dataCriacao: new Date(
+            DADOS_CRIACAO_LOGIN_USUARIOS.ana.anoCriacao, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.ana.mesCriacao, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.ana.diaCriacao
+        ),
+        dataUltimoLogin: new Date(
+            DADOS_CRIACAO_LOGIN_USUARIOS.ana.anoLogin, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.ana.mesLogin, 
+            DADOS_CRIACAO_LOGIN_USUARIOS.ana.diaLogin
+        ),
+        ativo: true,
+        tentativasLogin: 50
+    }),
 ];
+console.log(`Usuários admins: ${usuarios.filter(usuario => usuario.funcao === "admin").length}`);
+usuarios[INDICE_CARLOS].verificarStatus();
+usuarios[INDICE_JOSE].verificarAcesso();
 
-console.log("Usuários admin: " + t(usrs));
-
-usrs[0].x();
-usrs[1].y();
-
-l(usrs[2], 4);
-
-console.log(c(usrs[0], usrs[3]));
-
-r(usrs[3]);
+exibirMensagemTentativas(usuarios[INDICE_JOSE]);
+exibirMensagemUltimoLogin(usuarios[INDICE_CARLOS], usuarios[INDICE_MARIA]);
+exibirMensagemUsuarioRecente(usuarios[INDICE_MARIA]);

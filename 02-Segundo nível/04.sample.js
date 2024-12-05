@@ -1,15 +1,33 @@
-function tentarLogin(senha) {
-    let tentativas = 0;
-    const senhaCorreta = '12345';
+const MAX_TENTATIVAS = 3; 
+const SENHA_CORRETA = "12345";
 
-    while (tentativas < 3) {
-        if (senha === senhaCorreta) {
-            return 'Login efetuado com sucesso!';
+function verificarSenha(senha) {
+    if (typeof senha !== "string") {
+        throw new Error("A senha deve ser uma string.");
+    }
+    return senha === SENHA_CORRETA;
+}
+function tentarLogin(senha) {
+    if (typeof senha !== "string") {
+        throw new Error("A senha fornecida deve ser uma string.");
+    }
+
+    let tentativas = 0;
+
+    while (tentativas < MAX_TENTATIVAS) {
+        try {
+            if (verificarSenha(senha)) {
+                return "Login efetuado com sucesso!";
+            }
+        } catch (error) {
+            return error.message; 
         }
         tentativas++;
     }
-
-    return 'Tentativas de login excedidas.';
+    return "Tentativas de login excedidas.";
 }
-
-console.log(tentarLogin('123'));
+try {
+    console.log(tentarLogin("123"));
+} catch (error) {
+    console.error("Erro ao tentar fazer login:", error.message);
+}

@@ -2,9 +2,9 @@ async function buscarPersonagem() {
     const mensagemDiv = document.getElementById("mensagem");
     mensagemDiv.innerHTML = "";
 
-    const id = document.getElementById("personagemId").value;
+    const id = Number(document.getElementById("personagemId").value);
 
-    if (!id || id <= 0) {
+    if (!Number.isInteger(id) || id <= 0) {
         mostrarErro("ID inválido. Insira um número positivo.", "danger");
         return;
     }
@@ -24,12 +24,12 @@ async function buscarPersonagem() {
     }
 }
 
-function mostrarErro(mensagem, tipo) {
+const mostrarErro = (mensagem, tipo) => {
     const mensagemDiv = document.getElementById("mensagem");
     mensagemDiv.innerHTML = `<div class="alert alert-${tipo}" role="alert">${mensagem}</div>`;
-}
+};
 
-function mostrarResultado(personagem) {
+const mostrarResultado = (personagem) => {
     const mensagemDiv = document.getElementById("mensagem");
     mensagemDiv.innerHTML = `
       <div class="alert alert-success" role="alert">
@@ -37,4 +37,6 @@ function mostrarResultado(personagem) {
         <strong>Altura:</strong> ${personagem.height} cm<br>
         <strong>Peso:</strong> ${personagem.mass} kg
       </div>`;
-}
+};
+
+buscarPersonagem();
